@@ -50,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/success")
                 .permitAll() //登录页面用户任意访问
                 .and()
+                .formLogin()
+                .and()
                 .logout().permitAll(); //注销行为任意访问
 
 
