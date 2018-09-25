@@ -2,6 +2,7 @@ package com.test.mybatis.plus.controller;
 
 
 import com.test.mybatis.plus.common.Constants;
+import com.test.mybatis.plus.entity.Msg;
 import com.test.mybatis.plus.entity.User;
 import com.test.mybatis.plus.service.UserService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -9,11 +10,19 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.test.mybatis.plus.utils.Page;
 
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -30,7 +39,7 @@ import java.util.List;
  */
 /*@RestController*/
 @Controller
-@RequestMapping("user")
+
 public class UserController {
 
     @Resource
@@ -116,8 +125,52 @@ public class UserController {
         }
     }
 
-    @RequestMapping("login")
-    public String view(){
+    @RequestMapping("/admin")
+    @ResponseBody
+    public String hello(){
+        return "hello admin";
+    }
+
+    /**
+     * 登录页面
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/loginaction")
+    public String login(Model model, User user
+            , @RequestParam(value = "error",required = false) boolean error
+            , @RequestParam(value = "logout",required = false) boolean logout, HttpServletRequest request){
+        model.addAttribute(user);
+        //如果已经登陆跳转到个人首页
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication!=null&&
+                !authentication.getPrincipal().equals("admin")&&
+                authentication.isAuthenticated()) {
+            return "home";
+        }
+        if(error==true) {
+            model.addAttribute("error",error);
+        }
+        if(logout==true) {
+            model.addAttribute("logout",logout);
+        }
         return "login";
     }
+
+    @RequestMapping("home")
+    public String successUrl(){
+        return "home";
+    }
+
+    @RequestMapping("success")
+    public String se(){
+        return "success";
+    }
+    @RequestMapping("/")
+    public String index(Model model){
+        Msg msg =  new Msg("测试标题","测试内容","额外信息，只对管理员显示");
+        model.addAttribute("msg", msg);
+        return "home";
+    }
+
 }

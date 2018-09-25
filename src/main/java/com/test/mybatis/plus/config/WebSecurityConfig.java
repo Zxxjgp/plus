@@ -1,5 +1,7 @@
 package com.test.mybatis.plus.config;
 
+import com.test.mybatis.plus.service.impl.CustomUserService;
+import com.test.mybatis.plus.utils.MD5Util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-/*    @Bean
+    @Bean
     UserDetailsService customUserService(){ //注册UserDetailsService 的bean
         return new CustomUserService();
     }
@@ -35,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             public boolean matches(CharSequence rawPassword, String encodedPassword) {
                 return encodedPassword.equals(MD5Util.encode((String)rawPassword));
             }}); //user Details Service验证
-    }*/
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,19 +45,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated() //任何请求,登录后可以访问
                 .and()
                 .formLogin()
-                .loginPage("/user/login")
+                .loginPage("/login")
                 .failureUrl("/login?error")
+                .defaultSuccessUrl("/success")
                 .permitAll() //登录页面用户任意访问
                 .and()
                 .logout().permitAll(); //注销行为任意访问
 
 
     }
-    //5忽略静态资源的拦截
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/static/**");
-    }
+
 
 
 }
