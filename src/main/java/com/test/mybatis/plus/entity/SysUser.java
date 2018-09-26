@@ -2,6 +2,8 @@ package com.test.mybatis.plus.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,11 +12,10 @@ import java.util.List;
  * Created by yangyibo on 17/1/17.
  */
 
-public class SysUser implements UserDetails {
+public class SysUser  {
     private Integer id;
     private String username;
     private String password;
-
 
     private List<SysRole> roles;
 
@@ -30,34 +31,10 @@ public class SysUser implements UserDetails {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
     public String getPassword() {
         return password;
@@ -75,4 +52,10 @@ public class SysUser implements UserDetails {
         this.roles = roles;
     }
 
+    public static void main(String[] args) {
+        String password ="123456";
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+        System.out.println(hashedPassword);
+    }
 }

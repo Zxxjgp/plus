@@ -2,6 +2,7 @@ package com.test.mybatis.plus.dao;
 
 
 import com.test.mybatis.plus.entity.Permission;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 

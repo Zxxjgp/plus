@@ -125,7 +125,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/admin")
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
     @ResponseBody
     public String hello(){
         return "hello admin";
@@ -157,20 +157,39 @@ public class UserController {
         return "login";
     }
 
-    @RequestMapping("home")
+/*    @RequestMapping("home")
     public String successUrl(){
         return "home";
-    }
+    }*/
 
     @RequestMapping("success")
     public String se(){
         return "success";
     }
-    @RequestMapping("/")
+    @RequestMapping("/home")
     public String index(Model model){
         Msg msg =  new Msg("测试标题","测试内容","额外信息，只对管理员显示");
         model.addAttribute("msg", msg);
         return "home";
+    }
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @ResponseBody
+    public String getList(){
+        return "hello getList";
+    }
+
+
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @ResponseBody
+    public String save(){
+        return "hello save";
+    }
+
+
+    @RequestMapping(value = "/user", method = RequestMethod.PUT)
+    @ResponseBody
+    public String update(){
+        return "hello update";
     }
 
 }

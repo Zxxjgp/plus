@@ -1,16 +1,23 @@
 package com.test.mybatis.plus.config;
 
+
+import com.test.mybatis.plus.filter.MyFilterSecurityInterceptor;
 import com.test.mybatis.plus.service.impl.CustomUserService;
 import com.test.mybatis.plus.utils.MD5Util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+
+import javax.annotation.Resource;
 
 /**
  * Created by yangyibo on 17/1/18.
@@ -19,24 +26,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Resource
+    private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
+
+
     @Bean
-    UserDetailsService customUserService(){ //注册UserDetailsService 的bean
+    UserDetailsService customUserService() { //注册UserDetailsService 的bean
         return new CustomUserService();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserService()).passwordEncoder(new PasswordEncoder(){
+        auth.userDetailsService(customUserService());//user Details Service验证
 
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return MD5Util.encode((String)rawPassword);
-            }
-
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                return encodedPassword.equals(MD5Util.encode((String)rawPassword));
-            }}); //user Details Service验证
     }
 
     @Override
@@ -46,18 +48,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .successForwardUrl("/home")
                 .failureUrl("/login?error")
-                .defaultSuccessUrl("/success")
                 .permitAll() //登录页面用户任意访问
                 .and()
-                .formLogin()
-                .and()
                 .logout().permitAll(); //注销行为任意访问
+        http.addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
+                .csrf().disable();
 
 
     }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/resources/**");
+        //可以仿照上面一句忽略静态资源
+    }
 
-
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 }
 

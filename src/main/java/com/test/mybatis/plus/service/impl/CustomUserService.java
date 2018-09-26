@@ -4,9 +4,7 @@ package com.test.mybatis.plus.service.impl;
 import com.test.mybatis.plus.dao.PermissionMapper;
 import com.test.mybatis.plus.dao.UserMapper;
 import com.test.mybatis.plus.entity.Permission;
-import com.test.mybatis.plus.entity.SysRole;
 import com.test.mybatis.plus.entity.SysUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -35,6 +33,7 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
         SysUser user = userDao.findByUserName(username);
         if (user != null) {
             List<Permission> permissions = permissionDao.findByAdminUserId(user.getId());
+            //认证的权限集合
             List<GrantedAuthority> grantedAuthorities = new ArrayList <>();
             for (Permission permission : permissions) {
                 if (permission != null && permission.getName()!=null) {
@@ -45,6 +44,7 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
             }
             return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
         } else {
+            //没有此用户
             throw new UsernameNotFoundException("admin: " + username + " do not exist!");
         }
     }
