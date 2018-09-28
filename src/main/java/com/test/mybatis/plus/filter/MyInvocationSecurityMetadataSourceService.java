@@ -9,6 +9,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -28,11 +29,13 @@ public class MyInvocationSecurityMetadataSourceService  implements
     /**
      * 加载资源，初始化资源变量
      */
+    @PostConstruct
     public void loadResourceDefine(){
         map = new HashMap<>();
         Collection<ConfigAttribute> array;
         ConfigAttribute cfg;
         List<Permission> permissions = permissionDao.findAll();
+        System.out.println("======================================================================================");
         for(Permission permission : permissions) {
             array = new ArrayList<>();
             cfg = new SecurityConfig(permission.getName());

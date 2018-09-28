@@ -75,12 +75,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.example.hsjy</groupId>
-            <artifactId>test</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
         <!--end20180922-->
 
           <!--  20180925-->
@@ -103,7 +97,10 @@
             <artifactId>nekohtml</artifactId>
         </dependency>
        <!-- 20190925-->
-
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+        </dependency>
 
 
         <dependency>

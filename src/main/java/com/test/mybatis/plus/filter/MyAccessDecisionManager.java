@@ -28,6 +28,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
         String url, method;
         AntPathRequestMatcher matcher;
         for (GrantedAuthority ga : authentication.getAuthorities()) {
+            System.out.println(ga.getClass());
             if (ga instanceof MyGrantedAuthority) {
                 MyGrantedAuthority urlGrantedAuthority = (MyGrantedAuthority) ga;
                 url = urlGrantedAuthority.getPermissionUrl();

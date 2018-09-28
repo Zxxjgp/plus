@@ -7,7 +7,9 @@ import com.test.mybatis.plus.utils.MD5Util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +26,7 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
@@ -34,6 +37,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsService customUserService() { //注册UserDetailsService 的bean
         return new CustomUserService();
     }
+/*
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }*/
+
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest().authenticated() //任何请求,登录后可以访问
+                .antMatchers("/css/**").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")

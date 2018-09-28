@@ -5,6 +5,7 @@ import com.test.mybatis.plus.dao.PermissionMapper;
 import com.test.mybatis.plus.dao.UserMapper;
 import com.test.mybatis.plus.entity.Permission;
 import com.test.mybatis.plus.entity.SysUser;
+import com.test.mybatis.plus.filter.MyGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -42,6 +43,8 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
                     grantedAuthorities.add(grantedAuthority);
                 }
             }
+
+            user.setAuthoriti(grantedAuthorities);
             return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
         } else {
             //没有此用户

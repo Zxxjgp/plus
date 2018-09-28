@@ -15,7 +15,7 @@
 </style>
 </head>
 <body>
-	
+
 	 <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -33,7 +33,8 @@
 
       <div class="starter-template">
        <p th:if="${param.logout}" class="bg-warning">已成功注销</p><!-- 1 -->
-			<p th:if="${param.error}" class="bg-danger">有错误，请重试</p> <!-- 2 -->
+
+          <p th:if="${param.error}" class="bg-danger"><a th:text="${param.error}">3232</a></p> <!-- 2 -->
 			<h2>使用账号密码登录</h2>
 			<form name="form" th:action="@{/login}" action="/login" method="POST"> <!-- 3 -->
 				<div class="form-group">
@@ -49,6 +50,6 @@
       </div>
 
     </div>
-		
+
 </body>
 </html>

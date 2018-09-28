@@ -168,7 +168,7 @@ public class UserController {
     }
     @RequestMapping("/home")
     public String index(Model model){
-        Msg msg =  new Msg("测试标题","测试内容","额外信息，只对管理员显示");
+        Msg msg =  new Msg("1111111111111111","33333333333333","6666666666666666666666666666666");
         model.addAttribute("msg", msg);
         return "home";
     }
