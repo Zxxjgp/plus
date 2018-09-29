@@ -6,12 +6,10 @@ import com.test.mybatis.plus.dao.UserMapper;
 import com.test.mybatis.plus.entity.Permission;
 import com.test.mybatis.plus.entity.SysUser;
 import com.test.mybatis.plus.filter.MyGrantedAuthority;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -51,6 +49,8 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
             throw new UsernameNotFoundException("admin: " + username + " do not exist!");
         }
     }
+
+
 
 }
 

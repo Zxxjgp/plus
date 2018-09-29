@@ -1,6 +1,9 @@
 package com.test.mybatis.plus.config;
 
 
+import com.test.mybatis.plus.filter.LoginSuccessHandle;
+import com.test.mybatis.plus.filter.LogoutHandel;
+import com.test.mybatis.plus.filter.LogoutSuccessHandle;
 import com.test.mybatis.plus.filter.MyFilterSecurityInterceptor;
 import com.test.mybatis.plus.service.impl.CustomUserService;
 import com.test.mybatis.plus.utils.MD5Util;
@@ -53,17 +56,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated() //任何请求,登录后可以访问
+        http
+                .csrf().disable()
+
+                .authorizeRequests()
+       /*         .anyRequest().authenticated() //任何请求,登录后可以访问*/
                 .antMatchers("/css/**").permitAll()
+                .antMatchers("/logoutYemian").permitAll()
+                .antMatchers("/view").permitAll()
+                .antMatchers("/poi").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .successForwardUrl("/home")
+                .defaultSuccessUrl("/home").successHandler(new LoginSuccessHandle())
                 .failureUrl("/login?error")
                 .permitAll() //登录页面用户任意访问
                 .and()
-                .logout().permitAll(); //注销行为任意访问
+                .logout()
+                .logoutSuccessHandler(new LogoutSuccessHandle())
+                .addLogoutHandler(new LogoutHandel())
+                .permitAll(); //注销行为任意访问
+
         http.addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
                 .csrf().disable();
 
